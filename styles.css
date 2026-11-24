@@ -2058,3 +2058,35 @@ table tr:hover:not(:first-child){background:var(--glass-hover)}
   .kc-d::after{animation:none}
   .cot-o .cot-bong{transition:none}
 }
+
+
+/* =========================================================
+   SỬA BIỂU MẪU TRÀN NGANG TRÊN ĐIỆN THOẠI
+   Lưới dùng `1fr`, mà `1fr` thật ra là `minmax(auto, 1fr)`: cột KHÔNG co
+   được xuống dưới bề rộng nội dung tối thiểu của ô rộng nhất. Hàng chọn
+   màu nhãn (.hang-cuon) có 10 ô màu nằm ngang, min-content của nó là 403px,
+   nên kéo cả cột ra 403px trong khung chỉ 344px — mọi trường đều tràn khỏi
+   màn hình và nhãn "Tên công việc" bị cắt mất chữ đầu.
+   `minmax(0,1fr)` cho phép cột co lại, hàng màu quay về tự cuộn ngang
+   trong ô của nó như thiết kế ban đầu.
+   ========================================================= */
+
+.form-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.field{min-width:0}
+.hang-cuon{min-width:0;max-width:100%}
+.field input,.field select,.field textarea{max-width:100%}
+
+@media (max-width:768px){
+  .form-grid{grid-template-columns:minmax(0,1fr)}
+  /* Ngăn trượt: chừa lề đều hai bên và chỗ cho vùng an toàn dưới đáy máy */
+  body:not(.ep-maytinh) .modal.ngan .modal-box{
+    padding:18px 16px calc(18px + env(safe-area-inset-bottom));
+  }
+  body:not(.ep-maytinh) .modal-box{max-width:100vw;overflow-x:hidden}
+  /* Ô nhập cao hơn một chút cho dễ chạm, và cỡ chữ 16px để iOS không tự
+     phóng to trang khi người dùng bấm vào ô. */
+  body:not(.ep-maytinh) .field input,
+  body:not(.ep-maytinh) .field select,
+  body:not(.ep-maytinh) .field textarea{font-size:16px;padding:11px 12px}
+  body:not(.ep-maytinh) .field label{font-size:13px}
+}
